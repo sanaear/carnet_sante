@@ -9,7 +9,6 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
-        # used to reload user from session & other features (e.g. switch_user)
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -17,16 +16,27 @@ security:
         main:
             lazy: true
             provider: app_user_provider
+
             form_login:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
+
             login_throttling:
                 max_attempts: 5
                 interval: '1 minute'
+
             logout:
                 path: /logout
-                target: app_home # Nom de la route vers laquelle rediriger après logout
+            custom_authenticator: App\Security\LoginFormAuthenticator
+
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
+                # by default, the feature is enabled by checking a checkbox in the
+                # login form, uncomment the following line to always enable it.
+                #always_remember_me: true
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -37,8 +47,12 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-         - { path: ^/admin, roles: ROLE_ADMIN }
-         - { path: ^/profile, roles: ROLE_USER }
+    - { path: ^/admin, roles: ROLE_ADMIN }
+    - { path: ^/medecin, roles: ROLE_MEDECIN }
+    - { path: ^/patient, roles: ROLE_PATIENT }
+    - { path: ^/profile, roles: ROLE_USER }
+    - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:
     security:
