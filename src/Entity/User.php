@@ -8,31 +8,45 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
-#[ORM\InheritanceType('JOINED')] // Stratégie d'héritage
-#[ORM\DiscriminatorColumn(name: 'type', type: 'string')] // Colonne indiquant le type d'enfant
-#[ORM\DiscriminatorMap(['patient' => Patient::class, 'medecin' => Medecin::class, 'admin' => Administrator::class, 'user' => User::class])]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+#[ORM\InheritanceType("JOINED")]
+#[ORM\DiscriminatorColumn(name: "discriminator", type: "string", length: 30)]
+#[ORM\DiscriminatorMap([
+    "admin" => Admin::class,
+    "doctor" => Doctor::class,
+    "patient" => Patient::class
+])]
+abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, unique: true)]
+    #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column]
+    private array $roles = [];
+
+    #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $nomComplet = null;
+    #[ORM\Column(length: 100)]
+    private ?string $firstName = null;
 
-    #[ORM\Column(length: 20, nullable: true)]
-    private ?string $phone = null;
+    #[ORM\Column(length: 100)]
+    private ?string $lastName = null;
 
-    #[ORM\Column(type: 'json')]
-    protected  array $roles = [];
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $lastLoginAt = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -47,6 +61,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
+        return $this;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
 
         return $this;
     }
@@ -54,7 +96,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -66,57 +108,59 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getNomComplet(): ?string
-    {
-        return $this->nomComplet;
-    }
-
-    public function setNomComplet(string $nomComplet): static
-    {
-        $this->nomComplet = $nomComplet;
-
-        return $this;
-    }
-
-    public function getPhone(): ?string
-    {
-        return $this->phone;
-    }
-
-    public function setPhone(?string $phone): static
-    {
-        $this->phone = $phone;
-
-        return $this;
-    }
-
-   public function getRoles(): array
-{
-    $roles = $this->roles;
-
-    // garantit qu'au moins ROLE_USER est présent
-    $roles[] = 'ROLE_USER';
-
-    return array_unique($roles);
-}
-
-    public function setRoles(array $roles): static
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
-
     /**
      * @see UserInterface
      */
     public function eraseCredentials(): void
-{
-    // Nettoie les données sensibles ici si nécessaire
-}
-
-    public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): static
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): static
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getLastLoginAt(): ?\DateTimeImmutable
+    {
+        return $this->lastLoginAt;
+    }
+
+    public function setLastLoginAt(?\DateTimeImmutable $lastLoginAt): static
+    {
+        $this->lastLoginAt = $lastLoginAt;
+        return $this;
     }
 }

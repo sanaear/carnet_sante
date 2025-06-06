@@ -15,6 +15,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Doctrine\ORM\EntityManagerInterface;
 
 class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -22,19 +23,19 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    public function __construct(private UrlGeneratorInterface $urlGenerator, private EntityManagerInterface $entityManager)
     {
     }
 
     public function authenticate(Request $request): Passport
     {
-        $email = $request->getPayload()->getString('email');
+        $email = $request->getPayload()->getString('_username');
 
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
         return new Passport(
             new UserBadge($email),
-            new PasswordCredentials($request->getPayload()->getString('password')),
+            new PasswordCredentials($request->getPayload()->getString('_password')),
             [
                 new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
                 new RememberMeBadge(),
@@ -42,27 +43,18 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         );
     }
 
-   public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-{
-    if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-        return new RedirectResponse($targetPath);
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+    {
+        // Update last login timestamp
+        $user = $token->getUser();
+        if ($user instanceof \App\Entity\User) {
+            $user->setLastLoginAt(new \DateTimeImmutable());
+            $this->entityManager->flush();
+        }
+
+        // Always redirect to the patient dashboard
+        return new RedirectResponse($this->urlGenerator->generate('app_patient_dashboard'));
     }
-
-    $user = $token->getUser();
-    $roles = $user->getRoles();
-
-    if (in_array('ROLE_ADMIN', $roles, true)) {
-        return new RedirectResponse($this->urlGenerator->generate('admin_dashboard'));
-    } elseif (in_array('ROLE_MEDECIN', $roles, true)) {
-        return new RedirectResponse($this->urlGenerator->generate('medecin_dashboard'));
-    } elseif (in_array('ROLE_PATIENT', $roles, true)) {
-        return new RedirectResponse($this->urlGenerator->generate('patient_dashboard'));
-    }
-
-    // fallback (au cas où)
-    return new RedirectResponse($this->urlGenerator->generate('app_home'));
-}
-
 
     protected function getLoginUrl(Request $request): string
     {
