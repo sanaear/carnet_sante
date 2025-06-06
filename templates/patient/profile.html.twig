@@ -1,0 +1,173 @@
+{% extends 'patient/base.html.twig' %}
+
+{% block title %}Mon Profil - Carnet Santé{% endblock %}
+
+{% block content %}
+    <div class="space-y-6">
+        <!-- Page Header -->
+        <div class="bg-white shadow rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+                <h1 class="text-2xl font-bold text-gray-900">
+                    Mon Profil
+                </h1>
+                <p class="mt-1 text-sm text-gray-500">
+                    Gérez vos informations personnelles et vos préférences
+                </p>
+            </div>
+        </div>
+
+        <!-- Profile Information -->
+        <div class="bg-white shadow rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+                <div class="md:grid md:grid-cols-3 md:gap-6">
+                    <div class="md:col-span-1">
+                        <h3 class="text-lg font-medium leading-6 text-gray-900">Informations Personnelles</h3>
+                        <p class="mt-1 text-sm text-gray-500">
+                            Mettez à jour vos informations personnelles.
+                        </p>
+                    </div>
+                    <div class="mt-5 md:mt-0 md:col-span-2">
+                        {% for message in app.flashes('success') %}
+                            <div class="rounded-md bg-green-50 p-4 mb-6">
+                                <div class="flex">
+                                    <div class="flex-shrink-0">
+                                        <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <div class="ml-3">
+                                        <p class="text-sm font-medium text-green-800">{{ message }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        {{ form_start(profileForm, {'attr': {'class': 'space-y-6'}}) }}
+                            <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                                <div class="sm:col-span-3">
+                                    {{ form_label(profileForm.firstName, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                                    {{ form_widget(profileForm.firstName) }}
+                                    {{ form_errors(profileForm.firstName) }}
+                                </div>
+
+                                <div class="sm:col-span-3">
+                                    {{ form_label(profileForm.lastName, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                                    {{ form_widget(profileForm.lastName) }}
+                                    {{ form_errors(profileForm.lastName) }}
+                                </div>
+
+                                <div class="sm:col-span-4">
+                                    {{ form_label(profileForm.email, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                                    {{ form_widget(profileForm.email) }}
+                                    {{ form_errors(profileForm.email) }}
+                                </div>
+
+                                <div class="sm:col-span-2">
+                                    {{ form_label(profileForm.birthDate, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                                    {{ form_widget(profileForm.birthDate) }}
+                                    {{ form_errors(profileForm.birthDate) }}
+                                </div>
+
+                                <div class="sm:col-span-2">
+                                    {{ form_label(profileForm.bloodType, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                                    {{ form_widget(profileForm.bloodType) }}
+                                    {{ form_errors(profileForm.bloodType) }}
+                                </div>
+
+                                <div class="sm:col-span-6">
+                                    {{ form_label(profileForm.address, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                                    {{ form_widget(profileForm.address) }}
+                                    {{ form_errors(profileForm.address) }}
+                                </div>
+
+                                <div class="sm:col-span-6">
+                                    {{ form_label(profileForm.allergies, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                                    {{ form_widget(profileForm.allergies) }}
+                                    {{ form_errors(profileForm.allergies) }}
+                                    <p class="mt-1 text-sm text-gray-500">Listez toutes vos allergies connues, y compris les allergies alimentaires et médicamenteuses.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end">
+                                <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    Sauvegarder
+                                </button>
+                            </div>
+                        {{ form_end(profileForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Change Password -->
+        <div class="bg-white shadow rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+                <div class="md:grid md:grid-cols-3 md:gap-6">
+                    <div class="md:col-span-1">
+                        <h3 class="text-lg font-medium leading-6 text-gray-900">Changer le mot de passe</h3>
+                        <p class="mt-1 text-sm text-gray-500">
+                            Assurez-vous d'utiliser un mot de passe fort et unique.
+                        </p>
+                    </div>
+                    <div class="mt-5 md:mt-0 md:col-span-2">
+                        {% for message in app.flashes('password_error') %}
+                            <div class="rounded-md bg-red-50 p-4 mb-6">
+                                <div class="flex">
+                                    <div class="flex-shrink-0">
+                                        <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <div class="ml-3">
+                                        <p class="text-sm font-medium text-red-800">{{ message }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        {% for message in app.flashes('password_success') %}
+                            <div class="rounded-md bg-green-50 p-4 mb-6">
+                                <div class="flex">
+                                    <div class="flex-shrink-0">
+                                        <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <div class="ml-3">
+                                        <p class="text-sm font-medium text-green-800">{{ message }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        {{ form_start(passwordForm, {'attr': {'class': 'space-y-6'}}) }}
+                            <div>
+                                {{ form_label(passwordForm.currentPassword, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                                {{ form_widget(passwordForm.currentPassword) }}
+                                {{ form_errors(passwordForm.currentPassword) }}
+                            </div>
+
+                            <div>
+                                {{ form_label(passwordForm.newPassword.first, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                                {{ form_widget(passwordForm.newPassword.first) }}
+                                {{ form_errors(passwordForm.newPassword.first) }}
+                            </div>
+
+                            <div>
+                                {{ form_label(passwordForm.newPassword.second, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                                {{ form_widget(passwordForm.newPassword.second) }}
+                                {{ form_errors(passwordForm.newPassword.second) }}
+                            </div>
+
+                            <div class="flex justify-end">
+                                <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    Changer le mot de passe
+                                </button>
+                            </div>
+                        {{ form_end(passwordForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %} 

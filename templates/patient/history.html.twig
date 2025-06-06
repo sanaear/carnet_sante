@@ -1,0 +1,107 @@
+{% extends 'patient/base.html.twig' %}
+
+{% block content %}
+    <div class="space-y-6">
+        <!-- Page Header -->
+        <div class="bg-white shadow rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+                <h1 class="text-2xl font-bold text-gray-900">
+                    Historique Médical
+                </h1>
+                <p class="mt-1 text-sm text-gray-500">
+                    Consultez l'ensemble de votre historique médical et vos documents
+                </p>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-white shadow rounded-lg p-4 sm:p-6">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <div>
+                    <label for="year" class="block text-sm font-medium text-gray-700">Année</label>
+                    <select id="year" name="year" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                        <option value="all">Toutes les années</option>
+                        {% for year in "now"|date('Y')..2020 %}
+                            <option value="{{ year }}">{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
+                    <select id="type" name="type" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                        <option value="all">Tous les types</option>
+                        <option value="consultation">Consultations</option>
+                        <option value="document">Documents</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="bg-white shadow rounded-lg divide-y divide-gray-200">
+            {% if patient.consultations|length > 0 %}
+                {% for consultation in patient.consultations %}
+                    <div class="p-4 sm:p-6 hover:bg-gray-50 transition-colors duration-200">
+                        <div class="flex items-start space-x-4">
+                            <!-- Timeline Line -->
+                            <div class="relative flex-shrink-0">
+                                <div class="h-full absolute left-4 top-8 border-l-2 border-gray-200"></div>
+                                <div class="relative z-10 w-8 h-8 flex items-center justify-center bg-blue-100 rounded-full">
+                                    <span class="text-blue-600 text-lg">👨‍⚕️</span>
+                                </div>
+                            </div>
+
+                            <!-- Content -->
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-lg font-medium text-gray-900">
+                                        Consultation avec Dr. {{ consultation.doctor.lastName }}
+                                    </h3>
+                                    <time class="text-sm text-gray-500">
+                                        {{ consultation.date|date('d/m/Y') }}
+                                    </time>
+                                </div>
+                                
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-600">
+                                        {{ consultation.description }}
+                                    </p>
+                                </div>
+
+                                {% if consultation.medicalFiles|length > 0 %}
+                                    <div class="mt-4">
+                                        <h4 class="text-sm font-medium text-gray-900">Documents associés</h4>
+                                        <div class="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                                            {% for file in consultation.medicalFiles %}
+                                                <div class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm hover:border-gray-400">
+                                                    <div class="flex-shrink-0">
+                                                        <span class="text-2xl">📄</span>
+                                                    </div>
+                                                    <div class="min-w-0 flex-1">
+                                                        <a href="#" class="focus:outline-none">
+                                                            <p class="text-sm font-medium text-gray-900">{{ file.name }}</p>
+                                                            <p class="text-sm text-gray-500">{{ file.type }}</p>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="p-6 text-center">
+                    <span class="text-4xl">📋</span>
+                    <h3 class="mt-2 text-sm font-medium text-gray-900">Aucun historique</h3>
+                    <p class="mt-1 text-sm text-gray-500">
+                        Vous n'avez pas encore d'historique médical enregistré.
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %} 
