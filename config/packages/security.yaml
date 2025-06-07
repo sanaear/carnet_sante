@@ -36,6 +36,8 @@ security:
   access_control:
     - { path: ^/login, roles: PUBLIC_ACCESS }
     - { path: ^/patient, roles: ROLE_PATIENT }
+    - { path: ^/medecin/ordonnance, roles: ROLE_MEDECIN }
+    - { path: ^/patient/ordonnance, roles: ROLE_PATIENT }
     # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:

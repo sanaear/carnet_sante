@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Upload Prescription{% endblock %}
+
+{% block body %}
+    <h1>Upload Prescription</h1>
+    <p>For consultation with {{ consultation.patient.fullName }} on {{ consultation.date|date('d/m/Y') }}</p>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-primary">Upload</button>
+    {{ form_end(form) }}
+{% endblock %}
