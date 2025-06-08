@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Entity\User;
+use App\Entity\Patient;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -48,22 +48,22 @@ class CreatePatientCommand extends Command
             return Command::FAILURE;
         }
 
-        $user = new User();
-        $user->setEmail($email);
-        $user->setRoles(['ROLE_PATIENT']);
-        $user->setFirstname($firstname);
-        $user->setLastname($lastname);
+        $patient = new Patient();
+        $patient->setEmail($email);
+        $patient->setRoles(['ROLE_PATIENT']);
+        $patient->setFirstname($firstname);
+        $patient->setLastname($lastname);
         
         // Hash the password
-        $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
-        $user->setPassword($hashedPassword);
+        $hashedPassword = $this->passwordHasher->hashPassword($patient, $password);
+        $patient->setPassword($hashedPassword);
 
         // Save the user
-        $this->entityManager->persist($user);
+        $this->entityManager->persist($patient);
         $this->entityManager->flush();
 
         $io->success(sprintf('Patient user created successfully: %s', $email));
 
         return Command::SUCCESS;
     }
-} 
+}
