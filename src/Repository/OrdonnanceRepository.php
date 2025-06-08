@@ -3,6 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Ordonnance;
+use App\Entity\Consultation;
+use App\Entity\Patient;
+use App\Entity\Medecin;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -22,16 +25,84 @@ class OrdonnanceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Ordonnance[] Returns an array of Ordonnance objects
+     * Find ordonnances for a specific consultation
      */
-    public function findByConsultation($consultation): array
+    public function findByConsultation(Consultation $consultation): array
     {
         return $this->createQueryBuilder('o')
             ->andWhere('o.consultation = :consultation')
             ->setParameter('consultation', $consultation)
-            ->orderBy('o.dateCreation', 'DESC')
+            ->orderBy('o.createdAt', 'DESC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-} 
+
+    /**
+     * Find ordonnances for a specific patient
+     */
+    public function findByPatient(Patient $patient): array
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.consultation', 'c')
+            ->andWhere('c.patient = :patient')
+            ->setParameter('patient', $patient)
+            ->orderBy('o.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Find ordonnances created by a specific doctor
+     */
+    public function findByMedecin(Medecin $medecin): array
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.consultation', 'c')
+            ->andWhere('c.medecin = :medecin')
+            ->setParameter('medecin', $medecin)
+            ->orderBy('o.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Find the most recent ordonnances (for dashboard)
+     */
+    public function findRecent(int $maxResults = 5): array
+    {
+        return $this->createQueryBuilder('o')
+            ->orderBy('o.createdAt', 'DESC')
+            ->setMaxResults($maxResults)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Count ordonnances for statistics
+     */
+    public function countOrdonnances(): int
+    {
+        return $this->createQueryBuilder('o')
+            ->select('COUNT(o.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function save(Ordonnance $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(Ordonnance $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+}

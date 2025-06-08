@@ -10,8 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: DoctorRepository::class)]
 class Doctor extends User
 {
-    #[ORM\Column(length: 20)]
-    private ?string $phone = null;
+    
 
     #[ORM\Column(length: 100)]
     private ?string $speciality = null;
@@ -27,18 +26,7 @@ class Doctor extends User
         parent::__construct();
         $this->consultations = new ArrayCollection();
         $this->medicalFiles = new ArrayCollection();
-        $this->roles[] = 'ROLE_DOCTOR';
-    }
-
-    public function getPhone(): ?string
-    {
-        return $this->phone;
-    }
-
-    public function setPhone(string $phone): static
-    {
-        $this->phone = $phone;
-        return $this;
+        $this->setRoles(array_unique(array_merge($this->getRoles(), ['ROLE_DOCTOR'])));
     }
 
     public function getSpeciality(): ?string

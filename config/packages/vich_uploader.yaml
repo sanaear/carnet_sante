@@ -1,0 +1,10 @@
+vich_uploader:
+    db_driver: orm
+    mappings:
+        ordonnance_file:
+            uri_prefix: /uploads/ordonnances
+            upload_destination: '%kernel.project_dir%/public/uploads/ordonnances'
+            namer: vich_uploader.namer_uniqid
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true
