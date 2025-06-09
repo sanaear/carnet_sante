@@ -1,8 +1,23 @@
-{% extends 'base.html.twig' %}
+{% extends 'registration/layout.html.twig' %}
 
 {% block title %}Connexion - Carnet Santé{% endblock %}
 
 {% block body %}
+<style>
+    .bottom-link {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .bottom-link a {
+    color: #2563eb;
+    text-decoration: underline;
+  }
+
+  .bottom-link a:hover {
+    text-decoration: none;
+  }
+</style>
 <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
         <div>
@@ -53,6 +68,11 @@
                     Se connecter
                 </button>
             </div>
+            <!-- Lien de bas de page -->
+  <div class="bottom-link">
+    <p>vous n'avez pas de compte? <a href="{{ path('app_registration') }}">S'inscrire</a></p>
+  </div>
+</div>
         </form>
     </div>
 </div>

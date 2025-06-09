@@ -1,0 +1,284 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription Patient{% endblock %}
+
+{% block body %}
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-k5z1IxL4i13bOzzWBzEcpbZSGDxu/cGzEQfVdmu7Q35q1OJSI3on3jOgFQ0MXC5GyXYa8MSaK3K8+oBR9FNLyA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to bottom, #ffffff, #f0f7ff);
+    margin: 0;
+    padding: 2rem;
+  }
+
+  .form-card {
+    max-width: 600px;
+    margin: auto;
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 9px 20px rgba(0, 0, 0, 0.253);
+    overflow: hidden;
+  }
+
+  .header {
+    background-color: #2563eb;
+    color: white;
+    padding: 2rem;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+  }
+  h1 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  .tabs {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 1rem 0;
+    background-color: #f9fafb;
+    border-bottom: 2px solid #e5e7eb;
+    font-size: 0.95rem;
+  }
+
+  .tab.active {
+    color: #16a34a;
+    font-weight: bold;
+    padding-bottom: 0.3rem;
+  }
+
+  .tab.inactive {
+    color: #2563eb;
+    font-weight: bold;
+    padding-bottom: 0.3rem;
+
+
+  }
+
+  .section {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+  }
+
+  .input-group {
+    margin-bottom: 1rem;
+  }
+
+  label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.3rem;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  input[type="email"],
+  input[type="password"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    background-color: white;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  }
+
+  .password-wrapper {
+    position: relative;
+  }
+
+  .toggle-password {
+    position: absolute;
+    right: 1rem;
+    top: 38px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6b7280;
+    font-size: 1rem;
+  }
+
+  .submit-button {
+    background: linear-gradient(to right, #2563eb, #3b82f6);
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 1rem;
+    width: 80%;
+    margin: 0 auto;
+    border: none;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: background 0.3s ease, transform 0.2s ease;
+    margin-top: 1.5rem;
+  }
+
+  .submit-button:hover {
+    transform: translateY(-2px);
+    cursor: pointer;
+  }
+
+  .bottom-link {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .bottom-link a {
+    color: #2563eb;
+    text-decoration: underline;
+  }
+
+  .bottom-link a:hover {
+    text-decoration: none;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .grid-2 {
+      grid-template-columns: 1fr;
+    }
+  }
+   
+</style>
+<a href="{{ path('app_registration') }}" style="display: inline-flex; align-items: center; gap: 0.5rem; color: #2563eb; font-weight: 500; text-decoration: none; margin-bottom: 1rem;">
+  <i class="fas fa-arrow-left"></i> Retour au choix du compte 
+</a>
+
+<div class="form-card">
+  <!-- Header -->
+  <div class="header">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <i class="fas fa-user fa-lg"></i>
+      <div>
+        <h1>Inscription Patient</h1>
+        <p>Créez votre profil médical sécurisé pour un suivi personnalisé de votre santé</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Onglets -->
+  <div class="tabs">
+    <div class="tab active"><i class="fas fa-shield-alt"></i> Données sécurisées</div>
+    <div class="tab inactive"><i class="fas fa-heart"></i> Suivi personnalisé</div>
+  </div>
+
+  {{ form_start(form) }}
+
+  <!-- Section: Informations personnelles -->
+  <div class="section">
+    <div class="section-title"><i class="fas fa-user" style="color:#2563eb;"></i> Informations personnelles</div>
+    <div class="grid-2">
+      <div class="input-group">
+        {{ form_label(form.firstName, "Prénom*") }}
+        {{ form_widget(form.firstName, {'attr': {'placeholder': 'Votre prénom', 'required': 'required'}}) }}
+      </div>
+      <div class="input-group">
+        {{ form_label(form.lastName, "Nom*") }}
+        {{ form_widget(form.lastName, {'attr': {'placeholder': 'Votre nom', 'required': 'required'}}) }}
+      </div>
+      <div class="input-group">
+        {{ form_label(form.phone, "Téléphone*") }}
+        {{ form_widget(form.phone, {'attr': {'placeholder': '06 12 34 56 78', 'required': 'required'}}) }}
+      </div>
+      <div class="input-group">
+        {{ form_label(form.birthDate, "Date de naissance*") }}
+        {{ form_widget(form.birthDate, {'attr': {'placeholder': 'jj/mm/aaaa', 'required': 'required'}}) }}
+      </div>
+      <div class="input-group" style="grid-column: span 2;">
+        {{ form_label(form.address, "Adresse*") }}
+        {{ form_widget(form.address, {'attr': {'placeholder': 'Votre adresse complète', 'required': 'required'}}) }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Section: Informations médicales -->
+  <div class="section">
+    <div class="section-title"><i class="fas fa-heart" style="color:red;"></i> Informations médicales</div>
+    <div class="grid-2">
+      <div class="input-group">
+        {{ form_label(form.gender, "Genre*") }}
+        {{ form_widget(form.gender, {'attr': {'required': 'required'}}) }}
+      </div>
+      <div class="input-group">
+        {{ form_label(form.bloodType, "Groupe sanguin*") }}
+        {{ form_widget(form.bloodType, {'attr': {'required': 'required'}}) }}
+      </div>
+      <div class="input-group" style="grid-column: span 2;">
+        {{ form_label(form.allergies, "Allergies connues") }}
+        {{ form_widget(form.allergies, {'attr': {'placeholder': 'Décrivez vos allergies'}}) }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Section: Informations de connexion -->
+  <div class="section">
+    <div class="section-title"><i class="fas fa-lock" style="color:#16a34a;"></i> Informations de connexion</div>
+    <div class="grid-2">
+      <div class="input-group" style="grid-column: span 2;">
+        {{ form_label(form.email, "Email*") }}
+        {{ form_widget(form.email, {'attr': {'placeholder': 'votre.email@exemple.com', 'required': 'required'}}) }}
+      </div>
+      <div class="input-group password-wrapper">
+        {{ form_label(form.plainPassword.first, "Mot de passe*") }}
+        {{ form_widget(form.plainPassword.first, {'attr': {'type': 'password', 'id': 'password1', 'required': 'required'}}) }}
+        
+      </div>
+      <div class="input-group password-wrapper">
+        {{ form_label(form.plainPassword.second, "Confirmer le mot de passe*") }}
+        {{ form_widget(form.plainPassword.second, {'attr': {'type': 'password', 'id': 'password2', 'required': 'required'}}) }}
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- Bouton submit -->
+  <button type="submit" class="submit-button">
+    <i class="fas fa-check"></i> Créer mon carnet de santé
+  </button>
+
+  {{ form_end(form) }}
+
+  <!-- Lien de bas de page -->
+  <div class="bottom-link">
+    <p>Déjà inscrit ? <a href="{{ path('app_login') }}">Se connecter</a></p>
+  </div>
+</div>
+
+{% endblock %}

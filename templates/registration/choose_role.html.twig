@@ -1,0 +1,202 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer votre compte{% endblock %}
+
+{% block body %}
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to bottom right, #e0f2ff, #f7fbff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .icon-box {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(to right, #2563eb, #4f46e5);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .icon-box svg {
+      width: 28px;
+      height: 28px;
+      color: white;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: #6b7280;
+      margin-bottom: 40px;
+    }
+
+    .card-wrapper {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      width: 300px;
+      text-align: left;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      transition: 0.3s ease;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .card-icon.blue {
+      background: #dbeafe;
+      color: #2563eb;
+    }
+
+    .card-icon.green {
+      background: #d1fae5;
+      color: #059669;
+    }
+
+    .card h3 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 12px;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 20px;
+    }
+
+    .card a {
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .card a.blue {
+      color: #2563eb;
+    }
+
+    .card a.green {
+      color: #059669;
+    }
+
+    .card a svg {
+      margin-left: 5px;
+      width: 16px;
+      height: 16px;
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .footer a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+
+  <div class="container">
+    <div class="icon-box">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A9 9 0 0112 15a9 9 0 016.879 2.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
+      </svg>
+    </div>
+
+    <h1>Créer votre compte</h1>
+    <p class="subtitle">Choisissez votre type de compte pour accéder à une expérience personnalisée</p>
+
+    <div class="card-wrapper">
+      <!-- Patient -->
+      <div class="card">
+        <div class="card-icon blue">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A9 9 0 0112 15a9 9 0 016.879 2.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </div>
+        <h3>Je suis un patient</h3>
+        <p>Accédez à vos consultations et suivez votre parcours de soins en toute simplicité.</p>
+        <a href="{{ path('app_registration_patient') }}" class="blue">
+          Commencer
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Doctor -->
+      <div class="card">
+        <div class="card-icon green">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 3v6a6 6 0 006 6v3m6-15v6a6 6 0 01-6 6m6 3a1.5 1.5 0 003 0 1.5 1.5 0 00-3 0z"/>
+          </svg>
+        </div>
+        <h3>Je suis un médecin</h3>
+        <p>Gérez vos patients, planifiez vos consultations et accédez à vos outils professionnels de santé.</p>
+        <a href="{{ path('app_registration_doctor') }}" class="green">
+          Commencer
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer">
+      Vous avez déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a>
+    </div>
+  </div>
+{% endblock %}
