@@ -19,7 +19,7 @@ final class RegistrationController extends AbstractController
     public function index(): Response
     {
         // Page de choix du rôle (patient ou médecin)
-        return $this->render('registration/choose_role.html.twig');
+        return $this->render('registration/acceuil.html.twig');
     }
 
     #[Route('/registration/patient', name: 'app_registration_patient')]

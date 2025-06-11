@@ -1,4 +1,4 @@
-{% extends 'registration/layout.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Connexion - Carnet Santé{% endblock %}
 
@@ -70,7 +70,7 @@
             </div>
             <!-- Lien de bas de page -->
   <div class="bottom-link">
-    <p>vous n'avez pas de compte? <a href="{{ path('app_registration') }}">S'inscrire</a></p>
+    <p>vous n'avez pas de compte? <a href="{{ path('app_registration_patient') }}">S'inscrire</a></p>
   </div>
 </div>
         </form>

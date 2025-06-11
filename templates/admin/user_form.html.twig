@@ -1,13 +1,19 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base.html.twig' %}
 
-{% block title %}Inscription Patient{% endblock %}
+{% set titleText = type == 'patient' ? 'Ajouter un patient' : 'Ajouter un médecin' %}
 
-{% block body %}
+{% block title %}{{ titleText }}{% endblock %}
 
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-k5z1IxL4i13bOzzWBzEcpbZSGDxu/cGzEQfVdmu7Q35q1OJSI3on3jOgFQ0MXC5GyXYa8MSaK3K8+oBR9FNLyA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-<style>
+
+{% block content %}
+   <style>
+  :root {
+    --main-color: {{ type == 'patient' ? '#2563eb' : '#059669' }};
+    --main-color-light: {{ type == 'patient' ? '#3b82f6' : '#10b981' }};
+    --focus-shadow: {{ type == 'patient' ? 'rgba(37, 99, 235, 0.2)' : 'rgba(3, 83, 50, 0.2)' }};
+  }
+
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(to bottom, #ffffff, #f0f7ff);
@@ -16,49 +22,20 @@
   }
 
   .form-card {
-    max-width: 600px;
+    max-width:100%;
     margin: auto;
     background-color: white;
     border-radius: 1rem;
-    box-shadow: 0 9px 20px rgba(0, 0, 0, 0.253);
+    box-shadow: 0 9px 20px rgba(0, 0, 0, 0.144);
     overflow: hidden;
   }
 
   .header {
-    background-color: #2563eb;
+    background-color: var(--main-color);
     color: white;
     padding: 2rem;
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
-  }
-  h1 {
-    margin: 0;
-    font-size: 1.2rem;
-    font-weight: 600;
-  }
-
-  .tabs {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    padding: 1rem 0;
-    background-color: #f9fafb;
-    border-bottom: 2px solid #e5e7eb;
-    font-size: 0.95rem;
-  }
-
-  .tab.active {
-    color: #16a34a;
-    font-weight: bold;
-    padding-bottom: 0.3rem;
-  }
-
-  .tab.inactive {
-    color: #2563eb;
-    font-weight: bold;
-    padding-bottom: 0.3rem;
-
-
   }
 
   .section {
@@ -68,12 +45,10 @@
 
   .section-title {
     display: flex;
-    align-items: center;
     gap: 0.5rem;
     font-size: 1.2rem;
     font-weight: 600;
     color: #1f2937;
-    margin-bottom: 1.5rem;
   }
 
   .input-group {
@@ -108,8 +83,8 @@
   select:focus,
   textarea:focus {
     outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    border-color: var(--main-color);
+    box-shadow: 0 0 0 3px var(--focus-shadow);
   }
 
   .password-wrapper {
@@ -127,13 +102,13 @@
     font-size: 1rem;
   }
 
-  .submit-button {
-    background: linear-gradient(to right, #2563eb, #3b82f6);
+  .btn-primary{
+    background: linear-gradient(to right, var(--main-color), var(--main-color-light));
     color: white;
     font-size: 1.1rem;
     font-weight: bold;
     padding: 1rem;
-    width: 80%;
+    width: 30%;
     margin: 0 auto;
     border: none;
     border-radius: 0.5rem;
@@ -143,26 +118,15 @@
     gap: 0.5rem;
     transition: background 0.3s ease, transform 0.2s ease;
     margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+
   }
 
-  .submit-button:hover {
+  .btn-primary:hover {
     transform: translateY(-2px);
     cursor: pointer;
   }
 
-  .bottom-link {
-    text-align: center;
-    margin: 1.5rem 0;
-  }
-
-  .bottom-link a {
-    color: #2563eb;
-    text-decoration: underline;
-  }
-
-  .bottom-link a:hover {
-    text-decoration: none;
-  }
 
   .grid-2 {
     display: grid;
@@ -175,33 +139,13 @@
       grid-template-columns: 1fr;
     }
   }
-   
 </style>
-<a href="{{ path('app_registration') }}" style="display: inline-flex; align-items: center; gap: 0.5rem; color: #2563eb; font-weight: 500; text-decoration: none; margin-bottom: 1rem;">
-  <i class="fas fa-arrow-left"></i> Retour a la page d'acceuil
-</a>
 
 <div class="form-card">
-  <!-- Header -->
-  <div class="header">
-    <div style="display: flex; align-items: center; gap: 1rem;">
-      <i class="fas fa-user fa-lg"></i>
-      <div>
-        <h1>Inscription Patient</h1>
-        <p>Créez votre profil médical sécurisé pour un suivi personnalisé de votre santé</p>
-      </div>
-    </div>
-  </div>
+ 
 
-  <!-- Onglets -->
-  <div class="tabs">
-    <div class="tab active"><i class="fas fa-shield-alt"></i> Données sécurisées</div>
-    <div class="tab inactive"><i class="fas fa-heart"></i> Suivi personnalisé</div>
-  </div>
-
-  {{ form_start(form) }}
-
-  <!-- Section: Informations personnelles -->
+        {{ form_start(form) }}
+            <!-- Section: Informations personnelles -->
   <div class="section">
     <div class="section-title"><i class="fas fa-user" style="color:#2563eb;"></i> Informations personnelles</div>
     <div class="grid-2">
@@ -217,7 +161,12 @@
         {{ form_label(form.phone, "Téléphone*") }}
         {{ form_widget(form.phone, {'attr': {'placeholder': '06 12 34 56 78', 'required': 'required'}}) }}
       </div>
-      <div class="input-group">
+       {# Champs spécifiques au patient #}
+            {% if type == 'patient' %}
+            
+                 <!-- Section: Informations médicales -->
+  
+    <div class="input-group">
         {{ form_label(form.birthDate, "Date de naissance*") }}
         {{ form_widget(form.birthDate, {'attr': {'placeholder': 'jj/mm/aaaa', 'required': 'required'}}) }}
       </div>
@@ -225,14 +174,12 @@
         {{ form_label(form.address, "Adresse*") }}
         {{ form_widget(form.address, {'attr': {'placeholder': 'Votre adresse complète', 'required': 'required'}}) }}
       </div>
-    </div>
-  </div>
-
-  <!-- Section: Informations médicales -->
-  <div class="section">
     <div class="section-title"><i class="fas fa-heart" style="color:red;"></i> Informations médicales</div>
-    <div class="grid-2">
-      <div class="input-group">
+      <div class="input-group" style="grid-column: span 2;">
+        {{ form_label(form.allergies, "Allergies connues") }}
+        {{ form_widget(form.allergies, {'attr': {'placeholder': 'Décrivez vos allergies'}}) }}
+      </div>
+       <div class="input-group">
         {{ form_label(form.gender, "Genre*") }}
         {{ form_widget(form.gender, {'attr': {'required': 'required'}}) }}
       </div>
@@ -240,18 +187,21 @@
         {{ form_label(form.bloodType, "Groupe sanguin*") }}
         {{ form_widget(form.bloodType, {'attr': {'required': 'required'}}) }}
       </div>
-      <div class="input-group" style="grid-column: span 2;">
-        {{ form_label(form.allergies, "Allergies connues") }}
-        {{ form_widget(form.allergies, {'attr': {'placeholder': 'Décrivez vos allergies'}}) }}
-      </div>
     </div>
-  </div>
+  
+            {% endif %}
 
-  <!-- Section: Informations de connexion -->
-  <div class="section">
+            {# Champs spécifiques au médecin #}
+            {% if type == 'doctor' %}
+                <div class="input-group">
+        {{ form_label(form.speciality, "Spécialité*") }}
+        {{ form_widget(form.speciality, {'attr': {'required': 'required'}}) }}
+      </div>
+            {% endif %}
+      <!-- Section: Informations de connexion -->
+  
     <div class="section-title"><i class="fas fa-lock" style="color:#16a34a;"></i> Informations de connexion</div>
-    <div class="grid-2">
-      <div class="input-group" style="grid-column: span 2;">
+      <div class="input-group"style="grid-column: span 2;">
         {{ form_label(form.email, "Email*") }}
         {{ form_widget(form.email, {'attr': {'placeholder': 'votre.email@exemple.com', 'required': 'required'}}) }}
       </div>
@@ -266,19 +216,13 @@
         
       </div>
     </div>
-  </div>
+   <button type="submit" class="btn btn-primary">
+                {{ type == 'patient' ? 'Enregistrer le patient' : 'Enregistrer le médecin' }}
+            </button>
+    </div>
+ 
 
-  <!-- Bouton submit -->
-  <button type="submit" class="submit-button">
-    <i class="fas fa-check"></i> Créer mon carnet de santé
-  </button>
-
-  {{ form_end(form) }}
-
-  <!-- Lien de bas de page -->
-  <div class="bottom-link">
-    <p>Déjà inscrit ? <a href="{{ path('app_login') }}">Se connecter</a></p>
-  </div>
-</div>
-
+           
+        {{ form_end(form) }}
+    
 {% endblock %}
