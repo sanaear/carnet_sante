@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\InheritanceType("JOINED")]
 #[ORM\DiscriminatorColumn(name: "discriminator", type: "string", length: 30)]
 #[ORM\DiscriminatorMap([
-    "admin" => Admin::class,
+    "admin" => Administrator::class,
     "doctor" => Doctor::class,
     "patient" => Patient::class
 ])]
@@ -25,11 +25,14 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
-    #[ORM\Column]
-    private array $roles = [];
+    #[ORM\Column(type: 'json')]
+    protected  array $roles = [];
 
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $phone = null;
 
     #[ORM\Column(length: 100)]
     private ?string $firstName = null;
@@ -37,17 +40,11 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 100)]
     private ?string $lastName = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $lastLoginAt = null;
-
-    public function __construct()
-    {
-        $this->createdAt = new \DateTimeImmutable();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -92,14 +89,24 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
+    public function getPassword(): ?string
+{
+    return $this->password;
+}
+
+public function __toString(): string
+{
+    return $this->firstName . ' ' . $this->lastName;
+}
+
 
     public function setPassword(string $password): static
     {
@@ -140,8 +147,18 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function setPhone(?string $phone): static
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }

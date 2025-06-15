@@ -43,18 +43,33 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         );
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-    {
-        // Update last login timestamp
-        $user = $token->getUser();
-        if ($user instanceof \App\Entity\User) {
-            $user->setLastLoginAt(new \DateTimeImmutable());
-            $this->entityManager->flush();
-        }
+  public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+{
+    $user = $token->getUser();
 
-        // Always redirect to the patient dashboard
-        return new RedirectResponse($this->urlGenerator->generate('app_patient_dashboard'));
+    // Met à jour la date de dernière connexion
+    if ($user instanceof \App\Entity\User) {
+        $user->setLastLoginAt(new \DateTimeImmutable());
+        $this->entityManager->flush();
     }
+
+    // Redirection basée sur les rôles
+    $roles = $user->getRoles();
+
+    if (in_array('ROLE_ADMIN', $roles)) {
+        $route = 'app_admin_dashboard';
+    } elseif (in_array('ROLE_DOCTOR', $roles)) {
+        $route = 'app_doctor_dashboard';
+    } elseif (in_array('ROLE_PATIENT', $roles)) {
+        $route = 'app_patient_dashboard';
+    } else {
+        // fallback route si rôle inconnu
+        $route = 'app_login';
+    }
+
+    return new RedirectResponse($this->urlGenerator->generate($route));
+}
+
 
     protected function getLoginUrl(Request $request): string
     {

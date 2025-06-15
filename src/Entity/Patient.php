@@ -9,17 +9,10 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PatientRepository::class)]
-#[ORM\Table(name: 'patient')]
 class Patient extends User
 {
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $birthDate = null;
-
-    #[ORM\Column(length: 3, nullable: true)]
-    private ?string $bloodType = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $allergies = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $address = null;
@@ -30,12 +23,42 @@ class Patient extends User
     #[ORM\OneToMany(mappedBy: 'patient', targetEntity: MedicalFile::class)]
     private Collection $medicalFiles;
 
+#[ORM\Column(length: 10, nullable: true)]
+    private ?string $gender = null;
+    
+    #[ORM\Column(length: 3, nullable: true)]
+    private ?string $bloodType = null;
+
+#[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $allergies = null;
+public function getGender(): ?string
+{
+    return $this->gender;
+}
+
+public function setGender(?string $gender): static
+{
+    $this->gender = $gender;
+    return $this;
+}
+public function getBloodType(): ?string
+    {
+        return $this->bloodType;
+    }
+
+    public function setBloodType(?string $bloodType): static
+    {
+        $this->bloodType = $bloodType;
+        return $this;
+    }
     public function __construct()
     {
         parent::__construct();
         $this->consultations = new ArrayCollection();
         $this->medicalFiles = new ArrayCollection();
-        $this->roles[] = 'ROLE_PATIENT';
+
+        // ✅ Ajout sécurisé du rôle patient
+        $this->setRoles(array_unique(array_merge($this->getRoles(), ['ROLE_PATIENT'])));
     }
 
     public function getBirthDate(): ?\DateTimeInterface
@@ -48,19 +71,7 @@ class Patient extends User
         $this->birthDate = $birthDate;
         return $this;
     }
-
-    public function getBloodType(): ?string
-    {
-        return $this->bloodType;
-    }
-
-    public function setBloodType(?string $bloodType): static
-    {
-        $this->bloodType = $bloodType;
-        return $this;
-    }
-
-    public function getAllergies(): ?string
+public function getAllergies(): ?string
     {
         return $this->allergies;
     }
@@ -70,7 +81,6 @@ class Patient extends User
         $this->allergies = $allergies;
         return $this;
     }
-
     public function getAddress(): ?string
     {
         return $this->address;
@@ -82,9 +92,6 @@ class Patient extends User
         return $this;
     }
 
-    /**
-     * @return Collection<int, Consultation>
-     */
     public function getConsultations(): Collection
     {
         return $this->consultations;
@@ -103,7 +110,6 @@ class Patient extends User
     public function removeConsultation(Consultation $consultation): static
     {
         if ($this->consultations->removeElement($consultation)) {
-            // set the owning side to null (unless already changed)
             if ($consultation->getPatient() === $this) {
                 $consultation->setPatient(null);
             }
@@ -112,9 +118,6 @@ class Patient extends User
         return $this;
     }
 
-    /**
-     * @return Collection<int, MedicalFile>
-     */
     public function getMedicalFiles(): Collection
     {
         return $this->medicalFiles;
