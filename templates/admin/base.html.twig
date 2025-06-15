@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="min-h-full">
+        <!-- Navigation -->
+        <nav class="bg-white shadow">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div class="flex h-16 justify-between">
+                    <div class="flex">
+                        <div class="flex flex-shrink-0 items-center">
+                            <span class="text-2xl font-bold text-blue-600">🏥</span>
+                        </div>
+                        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                            <a href="{{ path('app_admin_dashboard') }}"
+                                class="{{ app.request.get('_route') == 'app_admin_dashboard' ? 'border-blue-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium">
+                                Tableau de bord
+                            </a>
+                            <a href="{{ path('admin_doctor_add') }}"
+                                class="{{ app.request.get('_route') == 'admin_doctor_add' ? 'border-blue-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium">
+                                Ajouter un medecin
+                            </a>
+                            <a href="{{ path('admin_patient_add') }}"
+                                class="{{ app.request.get('_route') == 'admin_patient_add' ? 'border-blue-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium">
+                                Ajouter un patient
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                        <!-- Profile dropdown -->
+                        <div class="relative ml-3" x-data="{ open: false }">
+                            <div>
+                                <button type="button" @click="open = !open" class="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                                    <span class="sr-only">Open user menu</span>
+                                    <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-500">
+                                        <span class="text-sm font-medium leading-none text-white">{{ app.user.firstName|first }}{{ app.user.lastName|first }}</span>
+                                    </span>
+                                </button>
+                            </div>
+
+                            <!-- Dropdown menu -->
+                            <div x-show="open" 
+                                 @click.away="open = false"
+                                 class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" 
+                                 role="menu" 
+                                 aria-orientation="vertical" 
+                                 aria-labelledby="user-menu-button" 
+                                 tabindex="-1">
+                                <a href="{{ path('admin_profile') }}" 
+                                   class="{{ app.request.get('_route') == 'admin_profile' ? 'bg-gray-100' : '' }} block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" 
+                                   role="menuitem" 
+                                   tabindex="-1">
+                                    Mon profil
+                                </a>
+                                <a href="{{ path('app_logout') }}" 
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" 
+                                   role="menuitem" 
+                                   tabindex="-1">
+                                    Déconnexion
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main>
+            <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+{% endblock %} 
