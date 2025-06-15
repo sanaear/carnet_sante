@@ -1,0 +1,333 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block content %}
+
+<div class="space-y-6 p-6">
+
+    <!-- Welcome Section -->
+    <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-lg p-6 sm:p-8">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-white sm:text-3xl">
+                    Bonjour, {{ app.user.firstName }} 👋
+                </h1>
+                <p class="mt-2 text-blue-100">
+                    Bienvenue sur votre tableau de bord administrateur
+                </p>
+            </div>
+            <div class="hidden sm:block">
+                <span class="text-white text-4xl">🏥</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Total Utilisateurs -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+                <h3 class="text-gray-500 text-sm font-medium">Utilisateurs</h3>
+                <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Total</span>
+            </div>
+            <p class="text-3xl font-bold text-gray-900 mt-2">{{ totalUsers }}</p>
+        </div>
+
+        <!-- Total Patients -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+                <h3 class="text-gray-500 text-sm font-medium">Patients</h3>
+                <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Actifs</span>
+            </div>
+            <p class="text-3xl font-bold text-gray-900 mt-2">{{ totalPatients }}</p>
+        </div>
+
+        <!-- Total Médecins -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+                <h3 class="text-gray-500 text-sm font-medium">Médecins</h3>
+                <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded">Spécialistes</span>
+            </div>
+            <p class="text-3xl font-bold text-gray-900 mt-2">{{ totalDoctors }}</p>
+        </div>
+    </div>
+
+    <!-- Gestion des utilisateurs -->
+    <div class="user-management-container mt-10">
+     <style>
+        .user-management-container {
+            max-width: 1150px;
+            margin: 0px auto;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 6px 32px 0 rgba(60, 72, 88, 0.089);
+            padding: 40px 32px 32px 32px;
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+        }
+        .um-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+        .um-header-title {
+        display: flex;
+        align-items: center;
+        gap: 10px; 
+        font-size: 1.5rem; 
+        font-weight: bold;   
+        color: #374151;    
+        }
+         .um-header-title svg {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+    }
+        .um-header-desc {
+            color: #757575;
+            font-size: 1rem;
+        }
+       .um-add-buttons-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.um-add-btn {
+    display: inline-flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.8rem; /* plus petit */
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    text-decoration: none;
+    transition: background 0.2s;
+    width: 170px;
+    justify-content: center;
+    gap: 6px;
+}
+        .um-add-btn svg {
+            margin-right: 8px;
+        }
+        .um-add-patient {
+    background-color: #2563eb; /* bleu */
+    color: white;
+}
+
+.um-add-patient:hover {
+    background-color: #1e40af; /* bleu plus foncé au hover */
+}
+
+.um-add-doctor {
+    background-color: #16a34a; /* vert */
+    color: white;
+}
+
+.um-add-doctor:hover {
+    background-color: #166534; /* vert plus foncé au hover */
+}
+        .um-filters {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .um-filter-btn {
+            padding: 10px 28px;
+            border-radius: 8px;
+            border: 1.5px solid #e5e7eb;
+            background: #fff;
+            color: #17171d;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.18s, color 0.18s, border 0.18s;
+            outline: none;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        .um-filter-btn.active {
+            background: #1c1c24;
+            color: #fff;
+            border: 1.5px solid #2a2a35;
+        }
+        .um-filter-btn.active:hover {
+            background: #2a2a35;
+        }
+        .um-table-wrapper {
+            overflow-x: auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px 0 rgba(60, 72, 88, 0.08);
+        }
+        .um-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 780px;
+        }
+        .um-table th, .um-table td {
+            padding: 18px 20px;
+            text-align: left;
+        }
+        .um-table thead th {
+            background: #f7fafc;
+            color: #757575;
+            font-size: medium;
+            font-weight: 500;
+            text-transform: uppercase;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        .um-table tbody tr {
+            border-bottom: 1px solid #f1f5f9;
+            transition: background 0.13s;
+            font-size: 0.95rem;
+
+        }
+        .um-table tbody tr:hover {
+            background: #f1f5f9;
+        }
+        .um-badge-patient {
+            display: inline-block;
+            background: #d1fae5;
+            color: #0284c7;
+            font-weight: 700;
+            font-size: 0.92rem;
+            padding: 5px 15px;
+            border-radius: 999px;
+        }
+        .um-badge-doctor {
+            display: inline-block;
+            background: #ede9fe;
+            color: #047857;
+            font-weight: 700;
+            font-size: 0.92rem;
+            padding: 5px 15px;
+            border-radius: 999px;
+        }
+        .um-actions {
+            display: flex;
+            gap: 16px;
+        }
+        .um-action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            color: #18181b;
+            transition: color 0.18s;
+            display: inline-flex;
+            align-items: center;
+        }
+        .um-action-btn.edit{
+            color: #2563eb;
+        }
+        .um-action-btn.delete {
+            color: #f43f5e;
+        }
+        
+    </style>
+
+    <div class="um-header">
+        <div>
+            <div class="um-header-title">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="#000000" xmlns="http://www.w3.org/2000/svg">
+        <polygon fill="none" stroke="#020202" stroke-width="1.08" stroke-miterlimit="10" points="2 2 2 5.64 10.18 15.64 10.18 22 13.82 20.18 13.82 15.64 22 5.64 22 2 2 2"/>
+    </svg>
+    Gestion des utilisateurs
+</div>
+
+            <div class="um-header-desc">Gérez tous vos utilisateurs depuis cette interface</div>
+        </div>
+       <div class="um-add-buttons-vertical">
+    <a href="{{ path('admin_patient_add') }}" class="um-add-btn um-add-patient" title="Ajouter un Patient">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+        </svg>
+        Ajouter un patient
+    </a>
+    <a href="{{ path('admin_doctor_add') }}" class="um-add-btn um-add-doctor" title="Ajouter un Médecin">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+        </svg>
+        Ajouter un médecin
+    </a>
+</div>
+
+
+    </div>
+
+    <div class="um-filters">
+        <a href="{{ path('app_admin_dashboard') }}"
+           class="um-filter-btn{% if not app.request.get('type') %} active{% endif %}">Tous</a>
+        <a href="{{ path('app_admin_dashboard', {'type': 'patient'}) }}"
+           class="um-filter-btn{% if app.request.get('type') == 'patient' %} active{% endif %}">Patients</a>
+        <a href="{{ path('app_admin_dashboard', {'type': 'doctor'}) }}"
+           class="um-filter-btn{% if app.request.get('type') == 'doctor' %} active{% endif %}">Médecins</a>
+    </div>
+    
+    <div class="um-table-wrapper">
+        <table class="um-table" role="grid" aria-label="Tableau des utilisateurs">
+            <thead>
+                <tr>
+                    <th scope="col">Type</th>
+                    <th scope="col">Prénom</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for patient in patients %}
+                    <tr>
+                        <td><span class="um-badge-patient">Patient</span></td>
+                        <td><span class="um-prenom-bold">{{ patient.firstName[:2] }}</span>{{ patient.firstName[2:] }}</td>
+                        <td>{{ patient.lastName }}</td>
+                        <td>{{ patient.email }}</td>
+                        <td>
+                            <div class="um-actions">
+                                <a href="{{ path('admin_patient_edit', {'id': patient.id}) }}" class="um-action-btn edit" title="Modifier">
+                                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21H3v-3.5L16.732 3.732z"/>
+                                    </svg>
+                                </a>
+                                <a href="{{ path('admin_patient_delete', {'id': patient.id}) }}" class="um-action-btn delete" title="Supprimer" onclick="return confirm('Supprimer ce patient ?')">
+                                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3m5 0H6"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                {% for doctor in doctors %}
+                    <tr>
+                        <td><span class="um-badge-doctor">Médecin</span></td>
+                        <td><span class="um-prenom-bold">{{ doctor.firstName[:2] }}</span>{{ doctor.firstName[2:] }}</td>
+                        <td>{{ doctor.lastName }}</td>
+                        <td>{{ doctor.email }}</td>
+                        <td>
+                            <div class="um-actions">
+                                <a href="{{ path('admin_doctor_edit', {'id': doctor.id}) }}" class="um-action-btn edit" title="Modifier">
+                                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21H3v-3.5L16.732 3.732z"/>
+                                    </svg>
+                                </a>
+                                <a href="{{ path('admin_doctor_delete', {'id': doctor.id}) }}" class="um-action-btn delete" title="Supprimer" onclick="return confirm('Supprimer ce médecin ?')">
+                                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3m5 0H6"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+</div>
+{% endblock %}
