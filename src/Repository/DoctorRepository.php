@@ -2,18 +2,18 @@
 
 namespace App\Repository;
 
-use App\Entity\Medecin;
+use App\Entity\Doctor;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Medecin>
+ * @extends ServiceEntityRepository<Doctor>
  */
-class MedecinRepository extends ServiceEntityRepository
+class DoctorRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Medecin::class);
+        parent::__construct($registry, Doctor::class);
     }
 
     //    /**
@@ -31,7 +31,7 @@ class MedecinRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Medecin
+    //    public function findOneBySomeField($value): ?Doctor
     //    {
     //        return $this->createQueryBuilder('m')
     //            ->andWhere('m.exampleField = :val')
