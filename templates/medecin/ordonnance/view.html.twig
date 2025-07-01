@@ -1,0 +1,110 @@
+{% extends 'medecin/base.html.twig' %}
+
+{% block title %}Ordonnance à imprimer{% endblock %}
+
+{% block content %}
+<style>
+@media print {
+    body * { visibility: hidden; }
+    #ordonnance-print, #ordonnance-print * { visibility: visible; }
+    #ordonnance-print { position: absolute; left: 0; top: 0; width: 100vw; background: white; }
+    .no-print { display: none !important; }
+}
+#ordonnance-print {
+    background: white;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 40px 50px;
+    box-shadow: 0 0 10px #ccc;
+    font-size: 1.1rem;
+    color: #222;
+    border-radius: 8px;
+}
+.ordonnance-header {
+    text-align: center;
+    border-bottom: 2px solid #4a5568;
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+}
+.ordonnance-header h1 {
+    font-size: 2rem;
+    margin: 0;
+}
+.ordonnance-header p {
+    color: #4a5568;
+    margin: 0;
+}
+.ordonnance-info {
+    margin-bottom: 30px;
+}
+.ordonnance-info-row {
+    display: flex;
+    margin-bottom: 8px;
+}
+.ordonnance-info-label {
+    font-weight: bold;
+    min-width: 160px;
+    color: #4a5568;
+}
+.ordonnance-content {
+    margin: 30px 0;
+    white-space: pre-line;
+    line-height: 1.7;
+}
+.ordonnance-footer {
+    margin-top: 50px;
+    text-align: right;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 20px;
+    font-size: 1rem;
+    color: #718096;
+}
+.ordonnance-signature {
+    margin-top: 60px;
+    text-align: right;
+}
+.ordonnance-signature-line {
+    display: inline-block;
+    width: 200px;
+    border-top: 1px solid #4a5568;
+    margin-top: 40px;
+}
+</style>
+<div class="flex justify-end mb-6 no-print">
+    <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow">Imprimer</button>
+</div>
+<div id="ordonnance-print">
+    <div class="ordonnance-header">
+        <h1>{{ ordonnance.title }}</h1>
+        <p>Date : {{ ordonnance.createdAt|date('d/m/Y') }}</p>
+    </div>
+    <div class="ordonnance-info">
+        <div class="ordonnance-info-row">
+            <div class="ordonnance-info-label">Patient :</div>
+            <div>{{ consultation.patient.getFullName() }}</div>
+        </div>
+        <div class="ordonnance-info-row">
+            <div class="ordonnance-info-label">Date de naissance :</div>
+            <div>{{ consultation.patient.getBirthDate() ? consultation.patient.getBirthDate()|date('d/m/Y') : 'Non spécifiée' }}</div>
+        </div>
+        <div class="ordonnance-info-row">
+            <div class="ordonnance-info-label">Médecin prescripteur :</div>
+            <div>Dr. {{ consultation.doctor.getFullName() }}</div>
+        </div>
+        <div class="ordonnance-info-row">
+            <div class="ordonnance-info-label">Spécialité :</div>
+            <div>{{ consultation.doctor.speciality }}</div>
+        </div>
+    </div>
+    <div class="ordonnance-content">
+        {{ ordonnance.content|raw }}
+    </div>
+    <div class="ordonnance-footer">
+        <div class="ordonnance-signature">
+            <div>Fait le {{ ordonnance.createdAt|date('d/m/Y') }}</div>
+            <div class="ordonnance-signature-line"></div>
+            <div>Signature et cachet du médecin</div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

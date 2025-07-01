@@ -1,0 +1,190 @@
+{% extends 'patient/base.html.twig' %}
+
+{% block content %}
+    <div class="space-y-6">
+        <!-- Welcome Section -->
+        <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-lg p-6 sm:p-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-white sm:text-3xl">
+                        Bonjour, {{ patient.firstName }} 👋
+                    </h1>
+                    <p class="mt-2 text-blue-100">
+                        Bienvenue sur votre tableau de bord personnel
+                    </p>
+                </div>
+                <div class="hidden sm:block">
+                    <span class="text-white text-4xl">🏥</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <!-- Total Consultations -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-gray-500 text-sm font-medium">Consultations</h3>
+                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Total</span>
+                </div>
+                <p class="text-3xl font-bold text-gray-900 mt-2">
+                    {{ patient.consultations|length }}
+                </p>
+            </div>
+            
+            <!-- Ordonnances -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-gray-500 text-sm font-medium">Ordonnances</h3>
+                    <a href="{{ path('app_patient_ordonnances') }}" class="text-blue-600 hover:text-blue-800 text-xs font-medium">Voir tout</a>
+                </div>
+                <p class="text-3xl font-bold text-gray-900 mt-2">
+                    {{ consultationsWithOrdonnances|length }}
+                </p>
+            </div>
+
+            <!-- Medical Files -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-gray-500 text-sm font-medium">Dossiers Médicaux</h3>
+                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Total</span>
+                </div>
+                <p class="text-3xl font-bold text-gray-900 mt-2">
+                    {{ patient.medicalFiles|length }}
+                </p>
+            </div>
+
+            <!-- Blood Type -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-gray-500 text-sm font-medium">Groupe Sanguin</h3>
+                    <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">Important</span>
+                </div>
+                <p class="text-3xl font-bold text-gray-900 mt-2">
+                    {{ patient.bloodType }}
+                </p>
+            </div>
+
+            <!-- Member Since -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-gray-500 text-sm font-medium">Membre depuis</h3>
+                    <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded">Info</span>
+                </div>
+                <p class="text-3xl font-bold text-gray-900 mt-2">
+                    {{ patient.createdAt|date('M Y') }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Recent Activity and Quick Actions -->
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <!-- Recent Ordonnances -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl font-semibold text-gray-900">Ordonnances Récentes</h2>
+                        <a href="{{ path('app_patient_ordonnances') }}" class="text-sm text-blue-600 hover:text-blue-800">Voir tout</a>
+                    </div>
+                </div>
+                <div class="divide-y divide-gray-200">
+                    {% if consultationsWithOrdonnances|length > 0 %}
+                        {% for consultation in consultationsWithOrdonnances|slice(0, 3) %}
+                            {% set ordonnance = consultation.ordonnance %}
+                            <div class="p-6">
+                                <div class="flex items-start justify-between">
+                                    <div>
+                                        <div class="flex items-center">
+                                            <h3 class="text-lg font-medium text-gray-900">
+                                                {{ ordonnance.title ?? 'Ordonnance du ' ~ consultation.date|date('d/m/Y') }}
+                                            </h3>
+                                        </div>
+                                        <p class="mt-1 text-sm text-gray-500">
+                                            Par Dr. {{ consultation.doctor.getFullName() }} · {{ consultation.date|date('d/m/Y') }}
+                                        </p>
+                                    </div>
+                                    <a href="{{ path('app_patient_ordonnance_download', {'id': ordonnance.id}) }}" 
+                                       class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                        Télécharger
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="p-6 text-center">
+                            <p class="text-gray-500">Aucune ordonnance disponible</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Recent Consultations -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-semibold text-gray-900">Consultations Récentes</h2>
+                </div>
+                <div class="divide-y divide-gray-200">
+                    {% if patient.consultations|length > 0 %}
+                        {% for consultation in patient.consultations|slice(0, 3) %}
+                            <div class="p-6">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">
+                                            {{ consultation.doctor.firstName }} {{ consultation.doctor.lastName }}
+                                        </p>
+                                        <p class="text-sm text-gray-500">
+                                            {{ consultation.description|slice(0, 100) }}...
+                                        </p>
+                                    </div>
+                                    <p class="text-sm text-gray-500">
+                                        {{ consultation.date|date('d/m/Y') }}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="p-6">
+                            <p class="text-gray-500 text-sm">Aucune consultation récente</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-semibold text-gray-900">Actions Rapides</h2>
+                </div>
+                <div class="p-6 space-y-6">
+                    <a href="{{ path('app_patient_history') }}" 
+                       class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-2xl">📋</span>
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Voir l'historique complet</p>
+                                <p class="text-sm text-gray-500">Consultez toutes vos consultations</p>
+                            </div>
+                        </div>
+                        <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+
+                    <a href="{{ path('app_patient_profile') }}" 
+                       class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-2xl">👤</span>
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">Gérer mon profil</p>
+                                <p class="text-sm text-gray-500">Modifier vos informations personnelles</p>
+                            </div>
+                        </div>
+                        <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %} 

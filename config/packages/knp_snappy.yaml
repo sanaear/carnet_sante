@@ -1,0 +1,23 @@
+knp_snappy:
+    pdf:
+        enabled: true
+        binary: '"C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe"'
+        # Alternative paths that will be checked if the default doesn't exist:
+        # - 'C:/Program Files (x86)/wkhtmltopdf/bin/wkhtmltopdf.exe'  # 32-bit install location
+        # - 'C:/wkhtmltopdf/bin/wkhtmltopdf.exe'  # Custom install location
+        options:
+            enable-local-file-access: true  # Required to include local files in PDF
+            no-stop-slow-scripts: true
+            javascript-delay: 1000  # Wait for JavaScript to execute (in ms)
+            encoding: 'UTF-8'
+            margin-top: 10
+            margin-right: 10
+            margin-bottom: 10
+            margin-left: 10
+    image:
+        enabled: true
+        binary: 'C:/Program Files/wkhtmltopdf/bin/wkhtmltoimage.exe'  # Default 64-bit install location
+        options: []
+
+# You can also configure temporary folder (optional)
+#    temporary_folder: '%kernel.project_dir%/var/tmp/knp_snappy'

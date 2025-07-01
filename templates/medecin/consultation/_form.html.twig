@@ -1,0 +1,81 @@
+{{ form_start(form, {'attr': {'class': 'space-y-8 divide-y divide-gray-200'}}) }}
+    <div class="space-y-8 divide-y divide-gray-200">
+        <div>
+            <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                <!-- Patient Field -->
+                <div class="sm:col-span-4">
+                    {{ form_label(form.patient, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    <div class="mt-1">
+                        {{ form_widget(form.patient, {'attr': {'class': 'block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'}}) }}
+                    </div>
+                    {{ form_errors(form.patient) }}
+                </div>
+
+                <!-- Date Field -->
+                <div class="sm:col-span-4">
+                    {{ form_label(form.date, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    <div class="mt-1">
+                        {{ form_widget(form.date, {'attr': {'class': 'block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'}}) }}
+                    </div>
+                    {{ form_errors(form.date) }}
+                </div>
+
+                <!-- Status Field -->
+                <div class="sm:col-span-4">
+                    {{ form_label(form.status, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    <div class="mt-1">
+                        {{ form_widget(form.status, {'attr': {'class': 'block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'}}) }}
+                    </div>
+                    {{ form_errors(form.status) }}
+                </div>
+
+                <!-- Start Time Field -->
+                <div class="sm:col-span-4">
+                    {{ form_label(form.startTime, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    <div class="mt-1">
+                        {{ form_widget(form.startTime, {'attr': {'class': 'block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'}}) }}
+                    </div>
+                    {{ form_errors(form.startTime) }}
+                </div>
+
+                <!-- End Time Field -->
+                <div class="sm:col-span-4">
+                    {{ form_label(form.endTime, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    <div class="mt-1">
+                        {{ form_widget(form.endTime, {'attr': {'class': 'block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'}}) }}
+                    </div>
+                    {{ form_errors(form.endTime) }}
+                </div>
+
+                <!-- Description Field -->
+                <div class="sm:col-span-6">
+                    {{ form_label(form.description, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    <div class="mt-1">
+                        {{ form_widget(form.description, {'attr': {'class': 'block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'}}) }}
+                    </div>
+                    {{ form_errors(form.description) }}
+                </div>
+
+                <!-- Notes Field -->
+                <div class="sm:col-span-6">
+                    {{ form_label(form.notes, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    <div class="mt-1">
+                        {{ form_widget(form.notes, {'attr': {'class': 'block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'}}) }}
+                    </div>
+                    {{ form_errors(form.notes) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pt-5">
+        <div class="flex justify-end">
+            <a href="{{ path('medecin_dashboard') }}" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Annuler
+            </a>
+            <button type="submit" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                {{ button_label|default('Enregistrer') }}
+            </button>
+        </div>
+    </div>
+{{ form_end(form) }}

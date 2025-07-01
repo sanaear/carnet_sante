@@ -1,0 +1,223 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Carnet de Santé Numérique{% endblock %}
+
+{% block stylesheets %}
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #ffffff;
+      color: #1f2937;
+      margin: 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 32px;
+      border-bottom: 1px solid #e5e7eb;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-container h1 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #1f2937;
+    }
+
+    .header-buttons a {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: 0.2s ease;
+    }
+
+    .header-buttons a.connexion {
+      border: 1px ;
+      color: #08183a9c;
+    }
+
+    .header-buttons a.connexion:hover {
+      color: #2563eb;
+    }
+
+    .header-buttons a.inscription {
+      background-color: #2563eb;
+      color: white;
+    }
+
+    .header-buttons a.inscription:hover {
+      background-color: #1d4ed8;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 64px 16px;
+    }
+    .hero h1 {
+      margin: 0%;
+      font-size: 4rem;
+      color: #2563eb;
+    }
+    .hero h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #06153b;
+      margin-bottom: 16px;
+    }
+
+    .hero p {
+      color: #6b7280;
+      font-size: 1.125rem;
+      margin-bottom: 32px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .hero-buttons a {
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.2s ease;
+    }
+
+    .hero-buttons a.primary {
+      background-color: #0284c7;
+      color: white;
+    }
+
+    .hero-buttons a.primary:hover {
+      background-color: #0369a1;
+    }
+
+    .hero-buttons a.secondary {
+      border: 1px  ;
+      background-color: #e2e3e4 ;
+      color: #081116;
+    }
+
+    .hero-buttons a.secondary:hover {
+      background-color: #cfd0d1;
+    }
+
+    .features {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 24px;
+      padding: 0 32px 64px;
+    }
+
+    .card {
+         background: white;
+      border-radius: 20px;
+      padding: 30px;
+      width: 300px;
+      text-align: left;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.267);
+      transition: 0.3s ease;
+      position: relative;
+    }
+ .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.267);
+    }
+    .card svg {
+      margin-bottom: 16px;
+    }
+
+    .card h3 {
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      color: #6b7280;
+      font-size: 1rem;
+    }
+    
+svg {
+  display: block;       
+  margin-left: auto;
+  margin-right: auto;
+   width: 45px;
+  height: 45px;
+}
+
+    @media (max-width: 768px) {
+      .features {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .card {
+        width: 90%;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block body %}
+<div>
+  <header>
+    <div class="logo-container">
+          <h1>🩺 Carnet Santé</h1>
+    </div>
+    <div class="header-buttons">
+      <a href="{{ path('app_login') }}" class="connexion">Connexion</a>
+      <a href="{{ path('app_registration_patient') }}" class="inscription">Inscription</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>🩺</h1>
+    <h2>Votre Carnet de Santé Numérique</h2>
+    <p>Gérez votre santé en toute simplicité sur une plateforme sécurisée et accessible à tout moment.</p>
+    <div class="hero-buttons">
+      <a href="{{ path('app_registration_patient') }}" class="primary">Créer mon compte patient</a>
+      <a href="{{ path('app_login') }}" class="secondary">Se connecter</a>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="card">
+<svg width="64px" height="64px" viewBox="0 0 24.00 24.00" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#382af8"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="2.256"> <path d="M15 19L17 21L21 17M13 3H8.2C7.0799 3 6.51984 3 6.09202 3.21799C5.71569 3.40973 5.40973 3.71569 5.21799 4.09202C5 4.51984 5 5.0799 5 6.2V17.8C5 18.9201 5 19.4802 5.21799 19.908C5.40973 20.2843 5.71569 20.5903 6.09202 20.782C6.51984 21 7.0799 21 8.2 21H11.5M13 3L19 9M13 3V7.4C13 7.96005 13 8.24008 13.109 8.45399C13.2049 8.64215 13.3578 8.79513 13.546 8.89101C13.7599 9 14.0399 9 14.6 9H19M19 9V13.4M9 17H11.5M9 13H15M9 9H10" stroke="#0284c7" stroke-width="0.8399999999999999" stroke-linecap="round" stroke-linejoin="round"></path> </g><g id="SVGRepo_iconCarrier"> <path d="M15 19L17 21L21 17M13 3H8.2C7.0799 3 6.51984 3 6.09202 3.21799C5.71569 3.40973 5.40973 3.71569 5.21799 4.09202C5 4.51984 5 5.0799 5 6.2V17.8C5 18.9201 5 19.4802 5.21799 19.908C5.40973 20.2843 5.71569 20.5903 6.09202 20.782C6.51984 21 7.0799 21 8.2 21H11.5M13 3L19 9M13 3V7.4C13 7.96005 13 8.24008 13.109 8.45399C13.2049 8.64215 13.3578 8.79513 13.546 8.89101C13.7599 9 14.0399 9 14.6 9H19M19 9V13.4M9 17H11.5M9 13H15M9 9H10" stroke="#0284c7" stroke-width="0.8399999999999999" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+      <h3>Dossier Médical Numérique</h3>
+      <p>Centralisez tous vos documents médicaux en un seul endroit sécurisé.</p>
+    </div>
+
+    <div class="card">
+      <svg width="64px" height="64px" viewBox="0 0 24.00 24.00" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="2.496"> <path d="M23 21V19C23 16.7909 21.2091 15 19 15H18.5M15 11C17.2091 11 19 9.20914 19 7C19 4.79086 17.2091 3 15 3M17 21V19C17 16.7909 15.2091 15 13 15H5C2.79086 15 1 16.7909 1 19V21M13 7C13 9.20914 11.2091 11 9 11C6.79086 11 5 9.20914 5 7C5 4.79086 6.79086 3 9 3C11.2091 3 13 4.79086 13 7Z" stroke="#0284c7" stroke-width="1.008" stroke-linecap="round" stroke-linejoin="round"></path> </g><g id="SVGRepo_iconCarrier"> <path d="M23 21V19C23 16.7909 21.2091 15 19 15H18.5M15 11C17.2091 11 19 9.20914 19 7C19 4.79086 17.2091 3 15 3M17 21V19C17 16.7909 15.2091 15 13 15H5C2.79086 15 1 16.7909 1 19V21M13 7C13 9.20914 11.2091 11 9 11C6.79086 11 5 9.20914 5 7C5 4.79086 6.79086 3 9 3C11.2091 3 13 4.79086 13 7Z" stroke="#0284c7" stroke-width="1.008" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+      <h3>Suivi par les Professionnels</h3>
+      <p>Permettez à vos médecins d’accéder à votre historique médical.</p>
+    </div>
+
+    <div class="card">
+      <svg width="64px" height="64px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="0.00024000000000000003"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.576"> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 3.73169L19.5 5.39836V12.75C19.5 15.6371 17.5419 18.9972 12.2605 20.9533L12 21.0498L11.7395 20.9533C6.45811 18.9972 4.5 15.6371 4.5 12.75V5.39836L12 3.73169ZM6 6.60161V12.75C6 14.8245 7.3659 17.6481 12 19.4479C16.6341 17.6481 18 14.8245 18 12.75V6.60161L12 5.26828L6 6.60161Z" fill="#0284c7"></path> </g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 3.73169L19.5 5.39836V12.75C19.5 15.6371 17.5419 18.9972 12.2605 20.9533L12 21.0498L11.7395 20.9533C6.45811 18.9972 4.5 15.6371 4.5 12.75V5.39836L12 3.73169ZM6 6.60161V12.75C6 14.8245 7.3659 17.6481 12 19.4479C16.6341 17.6481 18 14.8245 18 12.75V6.60161L12 5.26828L6 6.60161Z" fill="#0284c7"></path> </g></svg>
+      <h3>Sécurité Maximale</h3>
+      <p>Vos données de santé sont protégées par les plus hauts standards de sécurité.</p>
+    </div>
+  </section>
+</div>
+
+{% endblock %}

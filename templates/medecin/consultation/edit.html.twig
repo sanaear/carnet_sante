@@ -1,0 +1,28 @@
+{% extends 'medecin/base.html.twig' %}
+
+{% block title %}Modifier Consultation{% endblock %}
+
+{% block content %}
+    <div class="px-4 sm:px-6 lg:px-8">
+        <div class="sm:flex sm:items-center">
+            <div class="sm:flex-auto">
+                <h1 class="text-xl font-semibold text-gray-900">Modifier la Consultation</h1>
+                <p class="mt-2 text-sm text-gray-700">Modifier les détails de la consultation.</p>
+            </div>
+        </div>
+
+        <div class="mt-8">
+            {{ include('medecin/consultation/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+        </div>
+
+        <div class="mt-4">
+            {{ include('medecin/consultation/_delete_form.html.twig') }}
+        </div>
+
+        <div class="mt-4">
+            <a href="{{ path('medecin_dashboard') }}" class="text-sm font-medium text-blue-600 hover:text-blue-500">
+                Retour à la liste
+            </a>
+        </div>
+    </div>
+{% endblock %}

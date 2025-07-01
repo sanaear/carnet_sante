@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ ordonnance.title }}</title>
+    <style>
+        body {
+            font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #4a5568;
+            padding-bottom: 15px;
+        }
+        .header h1 {
+            color: #2d3748;
+            margin: 0;
+            font-size: 24px;
+        }
+        .header p {
+            margin: 5px 0 0;
+            color: #4a5568;
+        }
+        .info-section {
+            margin-bottom: 30px;
+        }
+        .info-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .info-label {
+            font-weight: bold;
+            min-width: 150px;
+            color: #4a5568;
+        }
+        .content {
+            margin: 30px 0;
+            white-space: pre-line;
+            line-height: 1.8;
+        }
+        .footer {
+            margin-top: 50px;
+            text-align: right;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+            font-size: 14px;
+            color: #718096;
+        }
+        .signature {
+            margin-top: 60px;
+            text-align: right;
+        }
+        .signature-line {
+            display: inline-block;
+            width: 200px;
+            border-top: 1px solid #4a5568;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>{{ ordonnance.title }}</h1>
+        <p>Date: {{ ordonnance.createdAt|date('d/m/Y') }}</p>
+    </div>
+
+    <div class="info-section">
+        <div class="info-row">
+            <div class="info-label">Patient :</div>
+            <div>{{ patient.getFullName() }}</div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">Date de naissance :</div>
+            <div>{{ patient.getBirthDate() ? patient.getBirthDate()|date('d/m/Y') : 'Non spécifiée' }}</div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">Médecin prescripteur :</div>
+            <div>Dr. {{ doctor.getFullName() }}</div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">Spécialité :</div>
+            <div>{{ doctor.speciality }}</div>
+        </div>
+    </div>
+
+    <div class="content">
+        {{ ordonnance.content|raw }}
+    </div>
+
+    <div class="footer">
+        <div class="signature">
+            <div>Fait à {{ consultation.getDescription() }}, le {{ ordonnance.createdAt|date('d/m/Y') }}</div>
+            <div class="signature-line"></div>
+            <div>Signature et cachet du médecin</div>
+        </div>
+    </div>
+</body>
+</html>

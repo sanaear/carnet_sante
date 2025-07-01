@@ -1,0 +1,120 @@
+{% extends 'medecin/base.html.twig' %}
+
+{% block title %}Tableau de bord - Espace Médecin{% endblock %}
+
+{% block content %}
+    <div class="bg-white shadow rounded-lg p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-gray-900">Tableau de bord</h1>
+            <div class="text-sm text-gray-500">
+                <span class="font-medium">Bienvenue,</span> {{ app.user.firstName }} {{ app.user.lastName }}
+            </div>
+        </div>
+        
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+            <!-- Example Stat Card -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 bg-blue-500 rounded-md p-3">
+                            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Rendez-vous aujourd'hui</dt>
+                                <dd class="flex items-baseline">
+                                    <div class="text-2xl font-semibold text-gray-900">3</div>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add more stat cards as needed -->
+        </div>
+
+        <!-- Upcoming Appointments -->
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+            <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Prochains rendez-vous</h3>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">Vos prochains rendez-vous programmés</p>
+            </div>
+            <div class="bg-white overflow-hidden
+                {% if appointments is not defined or appointments|length == 0 %}
+                    px-4 py-5 sm:px-6
+                {% endif %}">
+                {% if appointments is defined and appointments|length > 0 %}
+                    <!-- Appointments list -->
+                    <ul class="divide-y divide-gray-200">
+                        {% for appointment in appointments %}
+                            <li class="px-4 py-4 sm:px-6 hover:bg-gray-50">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <p class="text-sm font-medium text-blue-600 truncate">
+                                            {{ appointment.patient.firstName }} {{ appointment.patient.lastName }}
+                                        </p>
+                                        <p class="ml-2 text-sm text-gray-500">
+                                            {{ appointment.dateTime|date('H:i') }}
+                                        </p>
+                                    </div>
+                                    <div class="ml-2 flex-shrink-0 flex">
+                                        <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                            {% if appointment.status == 'confirmed' %}
+                                                bg-green-100 text-green-800
+                                            {% else %}
+                                                bg-yellow-100 text-yellow-800
+                                            {% endif %}">
+                                            {{ appointment.status|trans }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-sm text-gray-500">Aucun rendez-vous à venir pour le moment.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+            <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Actions rapides</h3>
+            </div>
+            <div class="px-4 py-5 sm:p-6">
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <a href="{{ path('app_doctor_profile') }}" class="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                        <div class="flex-shrink-0">
+                            <svg class="h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <span class="absolute inset-0" aria-hidden="true"></span>
+                            <p class="text-sm font-medium text-gray-900">Mon Profil</p>
+                            <p class="text-sm text-gray-500 truncate">Gérez vos informations personnelles</p>
+                        </div>
+                    </a>
+
+                    <a href="#" class="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                        <div class="flex-shrink-0">
+                            <svg class="h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <span class="absolute inset-0" aria-hidden="true"></span>
+                            <p class="text-sm font-medium text-gray-900">Nouveau rendez-vous</p>
+                            <p class="text-sm text-gray-500 truncate">Planifier une consultation</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block content %}
+    <p>Bonjour {{ patient.firstName }},</p>
+    
+    <p>Le Dr. {{ doctor.firstName }} {{ doctor.lastName }} a programmé une nouvelle consultation pour vous :</p>
+    
+    <div style="background-color: #f3f4f6; padding: 15px; border-radius: 5px; margin: 20px 0;">
+        <p><strong>Date et heure :</strong> {{ consultation.date|date('d/m/Y à H:i') }}</p>
+        <p><strong>Médecin :</strong> Dr. {{ doctor.firstName }} {{ doctor.lastName }}</p>
+        <p><strong>Spécialité :</strong> {{ doctor.speciality }}</p>
+        <p><strong>Description :</strong> {{ consultation.description }}</p>
+    </div>
+    
+    <p>Pour toute modification ou annulation, veuillez contacter directement le cabinet.</p>
+    
+    <p>Cordialement,<br>L'équipe Carnet Santé</p>
+{% endblock %}
